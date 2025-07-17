@@ -148,6 +148,14 @@
       };
    </script>
 
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const wrapper = document.querySelector('.fr-wrapper');
+        const firstDiv = wrapper?.querySelector('div');
+         if (firstDiv) firstDiv.remove();
+   });
+</script>
+
 </body>
 
 </html>
