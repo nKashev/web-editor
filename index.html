@@ -50,8 +50,12 @@
          margin-right: 8px;
       }
 
-/*       #fr-logo {
-         display: none !important; */
+      #fr-logo {
+         display: none !important;
+      }
+
+      div .fr-element .fr-view {
+         z-index: 99999 !important;
       }
    </style>
 </head>
@@ -146,15 +150,18 @@
       window.onload = () => {
          initializeEditor('classic');
       };
-   </script>
-
    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const wrapper = document.querySelector('.fr-wrapper');
-        const firstDiv = wrapper?.querySelector('div');
-         if (firstDiv) firstDiv.remove();
+      const observer = new MutationObserver(() => {
+      const wrapper = document.querySelector('.fr-wrapper');
+      const firstDiv = wrapper?.querySelector('div');
+      if (firstDiv && firstDiv.innerText.includes('Unlicensed copy')) {
+         firstDiv.remove();
+         observer.disconnect(); // спри да следиш след като го махнеш
+     }
    });
-</script>
+
+      observer.observe(document.body, { childList: true, subtree: true });
+   </script>
 
 </body>
 
