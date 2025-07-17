@@ -7,8 +7,13 @@ All-purpose, easy-to-use **WYSIWYG** (What You See Is What You Get) editor with 
 
 ## 🚀 Demo Links
 
-[![Open Editor (GitHub)](https://img.shields.io/badge/Open-GitHub%20Pages-brightgreen?style=for-the-badge)](https://nkashev.github.io/web-editor/)
-[![Open Editor (Netlify)](https://img.shields.io/badge/Open-Netlify-brightgreen?style=for-the-badge)](https://text-to-html-editor.netlify.app/)
+<a href="https://nkashev.github.io/web-editor/">
+  <img src="https://img.shields.io/badge/Open-GitHub%20Pages-brightgreen?style=for-the-badge" alt="GitHub Pages" />
+</a>
+<p><br></p>
+<a href="https://text-to-html-editor.netlify.app/">
+  <img src="https://img.shields.io/badge/Open-Netlify-brightgreen?style=for-the-badge" alt="Netlify" />
+</a>
 
 ---
 
