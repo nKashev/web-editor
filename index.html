@@ -50,6 +50,10 @@
          margin-right: 8px;
       }
 
+      .fr-wrapper > div:first-child a[href*="froala.com"] {
+           display: none !important;
+      }
+
       #fr-logo {
          display: none !important;
       }
@@ -146,19 +150,6 @@
       window.onload = () => {
          initializeEditor('classic');
       };
-   </script>
-   
-   <script>
-      const observer = new MutationObserver(() => {
-      const wrapper = document.querySelector('.fr-wrapper');
-      const firstDiv = wrapper?.querySelector('div');
-      if (firstDiv && firstDiv.innerText.includes('Unlicensed copy')) {
-         firstDiv.remove();
-         observer.disconnect(); // спри да следиш след като го махнеш
-     }
-   });
-
-      observer.observe(document.body, { childList: true, subtree: true });
    </script>
 
 </body>
