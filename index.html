@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Froala Editor - Dynamic Modes</title>
+   <!-- Froala CSS -->
+   <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' />
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+      }
+
+      #demo-container {
+         max-width: 1200px;
+         margin: 20px auto;
+      }
+
+      /* Style for mode selector buttons */
+      nav {
+         display: flex;
+         align-items: center;
+         margin-bottom: 10px;
+      }
+
+      .selector-button {
+         display: flex;
+         align-items: center;
+         border: 1px solid #ccc;
+         padding: 8px 12px;
+         margin-right: 10px;
+         border-radius: 5px;
+         cursor: pointer;
+         background: #f0f0f0;
+      }
+
+      .selector-button:hover {
+         background: #e0e0e0;
+      }
+
+      .selector-button.active {
+         background: #d0d0d0;
+         border-color: #999;
+      }
+
+      .icon-img {
+         width: 24px;
+         height: 24px;
+         margin-right: 8px;
+      }
+
+      #fr-logo {
+         display: none !important;
+      }
+   </style>
+</head>
+
+<body>
+
+   <div> <br>
+      <h1 class="fr-text-uppercase" style="text-align: center;">Froala Editor - Dynamic Modes</h1> <br>
+   </div>
+
+   <div id="demo-container">
+      <!-- Mode Selection Buttons -->
+      <nav>
+         <div class="selector-button active" data-mode="classic" title="Classic Mode">
+            <img class="icon-img" src="https://froala.com/wp-content/uploads/2022/10/Group-2.svg" alt="Classic Icon" />
+            <span>Classic</span>
+         </div>
+         <div class="selector-button" data-mode="inline" title="Inline Mode">
+            <img class="icon-img" src="https://froala.com/wp-content/uploads/2022/10/Group-6-1.svg" alt="Inline Icon" />
+            <span>Inline</span>
+         </div>
+         <div class="selector-button" data-mode="document" title="Document Ready">
+            <img class="icon-img" src="https://froala.com/wp-content/uploads/2022/10/Group-4-1.svg"
+               alt="Document Icon" />
+            <span>Document</span>
+         </div>
+      </nav>
+
+      <!-- Editor Container -->
+      <div id="editor-container" style="border: 1px solid #ccc; min-height: 200px; padding: 8px; margin-top: 10px;">
+         <!-- The editor will be initialized here -->
+      </div>
+   </div>
+
+   <!-- Froala JS -->
+   <script type='text/javascript'
+      src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
+
+   <script>
+      let editorInstance = null;
+      let contentData = ''; // for saving content when switching modes
+
+      const editorOptions = {
+         classic: {
+            heightMin: 300,
+            // toolbarButtons: ['bold', 'italic', 'underline', 'formatOL', 'formatUL', 'insertLink', 'insertImage'],
+         },
+         inline: {
+            inlineMode: true,
+            toolbarInline: true,
+            toolbarVisibleWithoutSelection: true,
+            heightMin: 200,
+         },
+         document: {
+            heightMin: 200,
+            documentReady: true,
+            // toolbarButtons: ['bold', 'italic', 'underline', 'formatOL', 'formatUL', 'insertLink', 'insertImage'],
+         }
+      };
+
+      function initializeEditor(mode) {
+         // Save current content
+         if (editorInstance) {
+            contentData = editorInstance.html.get(); // save current content
+            editorInstance.destroy();
+            document.getElementById('editor-container').innerHTML = '';
+         }
+
+         // Create textarea element
+         const container = document.getElementById('editor-container');
+         const textarea = document.createElement('textarea');
+         // Set previously saved content
+         textarea.innerHTML = contentData;
+         container.appendChild(textarea);
+         // Initialize Froala editor
+         editorInstance = new FroalaEditor(textarea, editorOptions[mode]);
+      }
+
+      // Handling mode button clicks
+      document.querySelectorAll('.selector-button').forEach(btn => {
+         btn.addEventListener('click', () => {
+            // Remove active class from all
+            document.querySelectorAll('.selector-button').forEach(b => b.classList.remove('active'));
+            // Add active to clicked
+            btn.classList.add('active');
+            const mode = btn.getAttribute('data-mode');
+            initializeEditor(mode);
+         });
+      });
+
+      // Initialize default mode
+      window.onload = () => {
+         initializeEditor('classic');
+      };
+   </script>
+
+</body>
+
+</html>
