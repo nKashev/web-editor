@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Froala Editor - Dynamic Modes</title>
+   <link rel="icon" href="favicon.png" type="image/png">
+
+   <!-- Froala CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" />
+   <!-- Font Awesome -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+      }
+
+      #demo-container {
+         max-width: 1200px;
+         margin: 20px auto;
+      }
+
+      nav {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 10px;
+      }
+
+      .selector-button {
+         display: flex;
+         align-items: center;
+         border: 1px solid #ccc;
+         padding: 8px 12px;
+         margin-right: 10px;
+         border-radius: 5px;
+         cursor: pointer;
+         background: #f0f0f0;
+      }
+
+      .selector-button:hover {
+         background: #e0e0e0;
+      }
+
+      .selector-button.active {
+         background: #d0d0d0;
+         border-color: #999;
+      }
+
+      .icon-img {
+         width: 24px;
+         height: 24px;
+         margin-right: 8px;
+      }
+
+      .fr-wrapper > div:first-child a[href*="froala.com"] {
+           display: none !important;
+      }
+
+      #fr-logo {
+         display: none !important;
+      }
+
+      p[data-f-id="pbf"] {
+         display: none !important;
+      }
+   </style>
+</head>
+
+<body>
+
+   <div><br>
+      <h1 class="fr-text-uppercase" style="text-align: center;">Froala Editor - Dynamic Modes</h1><br>
+   </div>
+
+   <div id="demo-container">
+
+      <!-- Mode Selection & Word Download Button -->
+      <nav>
+         <div style="display: flex;">
+            <div class="selector-button active" data-mode="classic" title="Classic Mode">
+               <img class="icon-img" src="https://froala.com/wp-content/uploads/2022/10/Group-2.svg"
+                  alt="Classic Icon" />
+               <span>Classic</span>
+            </div>
+            <div class="selector-button" data-mode="inline" title="Inline Mode">
+               <img class="icon-img" src="https://froala.com/wp-content/uploads/2022/10/Group-6-1.svg"
+                  alt="Inline Icon" />
+               <span>Inline</span>
+            </div>
+            <div class="selector-button" data-mode="document" title="Document Ready">
+               <img class="icon-img" src="https://froala.com/wp-content/uploads/2022/10/Group-4-1.svg"
+                  alt="Document Icon" />
+               <span>Document</span>
+            </div>
+         </div>
+
+         <!-- Word Download Button -->
+         <button onclick="downloadAsDocx()" class="selector-button" title="Download Word">
+            <i class="fa-solid fa-file-word" style="margin-right: 5px;"></i>
+            Word
+         </button>
+      </nav>
+
+      <!-- Editor Container -->
+      <div id="editor-container" style="border: 1px solid #ccc; min-height: 200px; padding: 8px; margin-top: 10px;">
+         <!-- Editor will be loaded here -->
+      </div>
+
+   </div>
+
+   <!-- Froala JS -->
+   <script src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+   <!-- Save as Word dependencies -->
+   <script src="assets/js/FileSaver.min.js"></script>
+   <script src="assets/js/html-docx.js"></script>
+
+   <script>
+      let editorInstance = null;
+      let contentData = '';
+
+      const editorOptions = {
+         classic: {
+            heightMin: 300,
+         },
+         inline: {
+            inlineMode: true,
+            toolbarInline: true,
+            toolbarVisibleWithoutSelection: true,
+            heightMin: 200,
+         },
+         document: {
+            heightMin: 200,
+            documentReady: true,
+         }
+      };
+
+      function initializeEditor(mode) {
+         if (editorInstance) {
+            contentData = editorInstance.html.get();
+            editorInstance.destroy();
+            document.getElementById('editor-container').innerHTML = '';
+         }
+
+         const container = document.getElementById('editor-container');
+         const textarea = document.createElement('textarea');
+         textarea.innerHTML = contentData;
+         container.appendChild(textarea);
+
+         editorInstance = new FroalaEditor(textarea, editorOptions[mode]);
+      }
+
+      document.querySelectorAll('.selector-button').forEach(btn => {
+         btn.addEventListener('click', () => {
+            document.querySelectorAll('.selector-button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const mode = btn.getAttribute('data-mode');
+            initializeEditor(mode);
+         });
+      });
+
+      window.onload = () => {
+         initializeEditor('classic');
+      };
+
+      function downloadAsDocx() {
+         const content = editorInstance.html.get();
+
+         const header = `
+         <html xmlns:o='urn:schemas-microsoft-com:office:office'
+               xmlns:w='urn:schemas-microsoft-com:office:word'
+               xmlns='http://www.w3.org/TR/REC-html40'>
+         <head><meta charset='utf-8'></head><body>`;
+         const footer = `</body></html>`;
+         const html = header + content + footer;
+
+         const blob = htmlDocx.asBlob(html);
+         saveAs(blob, 'editor-content.docx');
+      }
+   </script>
+
+</body>
+
+</html>
